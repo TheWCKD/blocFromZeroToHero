@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   MaterialPageRoute<SecondScreen>(
                     builder: (_) {
                       return BlocProvider.value(
-                        value: BlocProvider.of<CounterCubit>(context),
+                        value: context.bloc<CounterCubit>(),
                         child: SecondScreen(
                           color: Colors.redAccent,
                           title: 'Second Screen',
