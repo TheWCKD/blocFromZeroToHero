@@ -1,43 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc_concepts/logic/cubit/counter_cubit.dart';
 
-import 'cubit/counter_cubit.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: BlocProvider<CounterCubit>(
-        create: (context) => CounterCubit(),
-        child: MyHomePage(title: 'Flutter Demo Home Page'),
-      ),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class SecondScreen extends StatefulWidget {
+  SecondScreen({Key key, this.title, this.color}) : super(key: key);
 
   final String title;
+  final Color color;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _SecondScreenState createState() => _SecondScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _SecondScreenState extends State<SecondScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: widget.color,
         title: Text(widget.title),
       ),
       body: Center(
@@ -96,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 FloatingActionButton(
                   heroTag: Text('${widget.title}'),
+                  backgroundColor: widget.color,
                   onPressed: () {
                     BlocProvider.of<CounterCubit>(context).decrement();
                     // context.bloc<CounterCubit>().decrement();
@@ -104,7 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Icon(Icons.remove),
                 ),
                 FloatingActionButton(
-                  heroTag: Text('${widget.title} #2'),
+                  backgroundColor: widget.color,
+                  heroTag: Text('${widget.title} 2nd'),
                   onPressed: () {
                     // BlocProvider.of<CounterCubit>(context).increment();
                     context.bloc<CounterCubit>().increment();
@@ -114,6 +96,28 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             ),
+            SizedBox(
+              height: 24,
+            ),
+            // MaterialButton(
+            //   color: widget.color,
+            //   child: Text(
+            //     'Go to Second Screen',
+            //     style: TextStyle(color: Colors.white),
+            //   ),
+            //   onPressed: () {
+            //     Navigator.of(context).push(
+            //       MaterialPageRoute<HomeScreen>(
+            //         builder: (context) {
+            //           return HomeScreen(
+            //             color: Colors.redAccent,
+            //             title: 'Second Screen',
+            //           );
+            //         },
+            //       ),
+            //     );
+            //   },
+            // ),
           ],
         ),
       ),
