@@ -99,25 +99,16 @@ class _SecondScreenState extends State<SecondScreen> {
             SizedBox(
               height: 24,
             ),
-            // MaterialButton(
-            //   color: widget.color,
-            //   child: Text(
-            //     'Go to Second Screen',
-            //     style: TextStyle(color: Colors.white),
-            //   ),
-            //   onPressed: () {
-            //     Navigator.of(context).push(
-            //       MaterialPageRoute<HomeScreen>(
-            //         builder: (context) {
-            //           return HomeScreen(
-            //             color: Colors.redAccent,
-            //             title: 'Second Screen',
-            //           );
-            //         },
-            //       ),
-            //     );
-            //   },
-            // ),
+            MaterialButton(
+              color: Colors.greenAccent,
+              child: Text(
+                'Go to Third Screen',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/third');
+              },
+            ),
           ],
         ),
       ),
