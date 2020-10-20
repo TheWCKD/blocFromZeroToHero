@@ -12,22 +12,21 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final AppRouter _appRouter = AppRouter();
-  final InternetCubit _internetCubit = InternetCubit();
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CounterCubit>(
-      create: (context) => CounterCubit(internetCubit: _internetCubit),
-      child: BlocProvider.value(
-        value: _internetCubit,
-        child: MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          onGenerateRoute: _appRouter.onGenerateRoute,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<CounterCubit>(create: (context) => CounterCubit()),
+        BlocProvider<InternetCubit>(create: (context) => InternetCubit()),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
+        onGenerateRoute: _appRouter.onGenerateRoute,
       ),
     );
   }

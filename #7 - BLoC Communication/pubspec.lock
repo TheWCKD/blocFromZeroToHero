@@ -50,34 +50,34 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0-nullsafety.3"
-  connectivity:
+  connectivity_plus:
     dependency: "direct main"
     description:
-      name: connectivity
+      name: connectivity_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.9+5"
-  connectivity_for_web:
+    version: "0.5.0"
+  connectivity_plus_macos:
     dependency: transitive
     description:
-      name: connectivity_for_web
+      name: connectivity_plus_macos
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.1+2"
-  connectivity_macos:
+    version: "0.2.0"
+  connectivity_plus_platform_interface:
     dependency: transitive
     description:
-      name: connectivity_macos
+      name: connectivity_plus_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0+5"
-  connectivity_platform_interface:
+    version: "0.2.0"
+  connectivity_plus_web:
     dependency: transitive
     description:
-      name: connectivity_platform_interface
+      name: connectivity_plus_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.6"
+    version: "0.4.0"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -226,4 +226,4 @@ packages:
     version: "2.1.0-nullsafety.3"
 sdks:
   dart: ">=2.10.0-110 <2.11.0"
-  flutter: ">=1.16.0 <2.0.0"
+  flutter: ">=1.20.0 <2.0.0"

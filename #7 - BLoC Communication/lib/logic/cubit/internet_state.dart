@@ -20,11 +20,10 @@ class InternetLoading extends InternetState {
 }
 
 class NoInternet extends InternetState {
-  final InternetType internetType;
+  NoInternet();
 
-  NoInternet({@required this.internetType});
   @override
-  List<Object> get props => [internetType];
+  List<Object> get props => [];
 }
 
 class InternetAvailable extends InternetState {
