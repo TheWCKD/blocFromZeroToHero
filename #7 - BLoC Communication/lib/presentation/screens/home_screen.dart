@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc_concepts/logic/cubit/counter_cubit.dart';
-import 'package:flutter_bloc_concepts/logic/cubit/internet_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key, this.title, this.color}) : super(key: key);
@@ -25,29 +24,75 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            BlocConsumer<InternetCubit, InternetState>(
-              listener: internetListener,
-              builder: internetBuilder,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Divider(
-                thickness: 4,
-              ),
-            ),
-            SizedBox(
-              height: 12,
-            ),
             Text(
-              '(WIFI = +1, MOBILE = -1)',
-              style: Theme.of(context).textTheme.headline6,
+              'You have pushed the button this many times:',
+            ),
+            BlocConsumer<CounterCubit, CounterState>(
+              listener: (context, state) {
+                if (state.wasIncremented == true) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Incremented!'),
+                      duration: Duration(milliseconds: 300),
+                    ),
+                  );
+                } else if (state.wasIncremented == false) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Decremented!'),
+                      duration: Duration(milliseconds: 300),
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                if (state.counterValue < 0) {
+                  return Text(
+                    'BRR, NEGATIVE ' + state.counterValue.toString(),
+                    style: Theme.of(context).textTheme.headline4,
+                  );
+                } else if (state.counterValue % 2 == 0) {
+                  return Text(
+                    'YAAAY ' + state.counterValue.toString(),
+                    style: Theme.of(context).textTheme.headline4,
+                  );
+                } else if (state.counterValue == 5) {
+                  return Text(
+                    'HMM, NUMBER 5',
+                    style: Theme.of(context).textTheme.headline4,
+                  );
+                } else
+                  return Text(
+                    state.counterValue.toString(),
+                    style: Theme.of(context).textTheme.headline4,
+                  );
+              },
             ),
             SizedBox(
               height: 24,
             ),
-            BlocConsumer<CounterCubit, CounterState>(
-              listener: counterListener,
-              builder: counterBuilder,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                FloatingActionButton(
+                  heroTag: Text('${widget.title}'),
+                  onPressed: () {
+                    BlocProvider.of<CounterCubit>(context).decrement();
+                    // context.bloc<CounterCubit>().decrement();
+                  },
+                  tooltip: 'Decrement',
+                  child: Icon(Icons.remove),
+                ),
+                FloatingActionButton(
+                  heroTag: Text('${widget.title} 2nd'),
+                  onPressed: () {
+                    // BlocProvider.of<CounterCubit>(context).increment();
+                    context.bloc<CounterCubit>().increment();
+                  },
+                  tooltip: 'Increment',
+                  child: Icon(Icons.add),
+                ),
+              ],
             ),
             SizedBox(
               height: 24,
@@ -82,94 +127,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget counterBuilder(context, state) {
-    if (state.counterValue < 0) {
-      return Text(
-        'BRR, NEGATIVE ' + state.counterValue.toString(),
-        style: Theme.of(context).textTheme.headline3,
-      );
-    } else if (state.counterValue % 2 == 0) {
-      return Text(
-        'YAAAY ' + state.counterValue.toString(),
-        style: Theme.of(context).textTheme.headline3,
-      );
-    } else if (state.counterValue == 5) {
-      return Text(
-        'HMM, NUMBER 5',
-        style: Theme.of(context).textTheme.headline3,
-      );
-    } else
-      return Text(
-        state.counterValue.toString(),
-        style: Theme.of(context).textTheme.headline3,
-      );
-  }
-
-  void counterListener(context, state) {
-    if (state.wasIncremented == true) {
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Wi-Fi connected!'),
-          duration: Duration(milliseconds: 300),
-        ),
-      );
-    } else if (state.wasIncremented == false) {
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Mobile connected!'),
-          duration: Duration(milliseconds: 300),
-        ),
-      );
-    }
-  }
-
-  void internetListener(context, state) {
-    if (state is InternetAvailable && state.internetType == InternetType.Wifi) {
-      context.bloc<CounterCubit>().increment();
-
-      // BlocProvider.of<CounterCubit>(context).increment();
-    } else if (state is InternetAvailable &&
-        state.internetType == InternetType.Mobile) {
-      BlocProvider.of<CounterCubit>(context).decrement();
-    }
-  }
-
-  Widget internetBuilder(context, state) {
-    if (state is InternetLoading) {
-      return CircularProgressIndicator();
-    } else if (state is InternetAvailable &&
-        state.internetType == InternetType.Wifi) {
-      return Text(
-        'WIFI MODE',
-        style: Theme.of(context)
-            .textTheme
-            .headline3
-            .copyWith(color: Colors.blueAccent),
-      );
-    } else if (state is InternetAvailable &&
-        state.internetType == InternetType.Mobile) {
-      return Text(
-        'MOBILE MODE',
-        style: Theme.of(context)
-            .textTheme
-            .headline3
-            .copyWith(color: Colors.blueAccent),
-      );
-    } else if (state is NoInternet) {
-      return Text(
-        'NO WIFI/MOBILE',
-        style: Theme.of(context)
-            .textTheme
-            .headline3
-            .copyWith(color: Colors.blueAccent),
-      );
-    }
-    return Text(
-      'CHECKING CONNECTION...',
-      style: Theme.of(context).textTheme.headline5,
     );
   }
 }
