@@ -2,58 +2,40 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc_concepts/constants/enums.dart';
 import 'package:meta/meta.dart';
 
 part 'internet_state.dart';
 
-void monitorInternetConnection(
-  StreamSubscription _connectivityStreamSubscription,
-  Connectivity _connectivity,
-  InternetCubit cubit,
-) async {
-  _connectivityStreamSubscription =
-      _connectivity.onConnectivityChanged.listen((connectivityResult) async {
-    cubit.showLoadingAnimation();
-    switch (connectivityResult) {
-      case ConnectivityResult.none:
-        print('NO INTERNET');
-        cubit.showNoInternet();
-        break;
-      case ConnectivityResult.wifi:
-        print('WIFI');
-        cubit.showInternetAvailable(InternetType.Wifi);
-        break;
-      case ConnectivityResult.mobile:
-        print('MOBILE');
-        cubit.showInternetAvailable(InternetType.Mobile);
-        break;
-      default:
-        print('UNKNOWN');
-        cubit.showUnknownConnection();
-        break;
-    }
-  });
-}
-
 class InternetCubit extends Cubit<InternetState> {
-  final Connectivity _connectivity = Connectivity();
-  StreamSubscription _connectivityStreamSubscription;
+  final Connectivity connectivity;
+  StreamSubscription connectivityStreamSubscription;
 
-  InternetCubit() : super(InternetInitial()) {
-    monitorInternetConnection(
-        _connectivityStreamSubscription, _connectivity, this);
+  InternetCubit({@required this.connectivity}) : super(InternetLoading()) {
+    monitorInternetConnection();
   }
 
-  void showNoInternet() => emit(NoInternet());
-  void showInternetAvailable(InternetType internetType) =>
-      emit(InternetAvailable(internetType: internetType));
-  void showUnknownConnection() => emit(UnknownConnection());
-  void showLoadingAnimation() => emit(InternetLoading());
+  StreamSubscription<ConnectivityResult> monitorInternetConnection() {
+    return connectivityStreamSubscription =
+        connectivity.onConnectivityChanged.listen((connectivityResult) {
+      if (connectivityResult == ConnectivityResult.wifi) {
+        emitInternetConnected(ConnectionType.Wifi);
+      } else if (connectivityResult == ConnectivityResult.mobile) {
+        emitInternetConnected(ConnectionType.Mobile);
+      } else if (connectivityResult == ConnectivityResult.none) {
+        emitInternetDisconnected();
+      }
+    });
+  }
+
+  void emitInternetConnected(ConnectionType _connectionType) =>
+      emit(InternetConnected(connectionType: _connectionType));
+
+  void emitInternetDisconnected() => emit(InternetDisconnected());
 
   @override
   Future<void> close() {
-    _connectivityStreamSubscription.cancel();
+    connectivityStreamSubscription.cancel();
     return super.close();
   }
 }
