@@ -13,9 +13,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  GlobalKey<ScaffoldState> homeScreenKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: homeScreenKey,
       appBar: AppBar(
         backgroundColor: widget.color,
         title: Text(widget.title),
@@ -30,14 +32,14 @@ class _HomeScreenState extends State<HomeScreen> {
             BlocConsumer<CounterCubit, CounterState>(
               listener: (context, state) {
                 if (state.wasIncremented == true) {
-                  Scaffold.of(context).showSnackBar(
+                  homeScreenKey.currentState.showSnackBar(
                     SnackBar(
                       content: Text('Incremented!'),
                       duration: Duration(milliseconds: 300),
                     ),
                   );
                 } else if (state.wasIncremented == false) {
-                  Scaffold.of(context).showSnackBar(
+                  homeScreenKey.currentState.showSnackBar(
                     SnackBar(
                       content: Text('Decremented!'),
                       duration: Duration(milliseconds: 300),
@@ -106,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 Navigator.of(context).pushNamed(
                   '/second',
+                  arguments: homeScreenKey,
                 );
               },
             ),

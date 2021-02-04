@@ -9,12 +9,12 @@ packages:
     source: hosted
     version: "2.5.0-nullsafety.1"
   bloc:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.3"
+    version: "6.1.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -75,7 +75,7 @@ packages:
       name: flutter_bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.5"
+    version: "6.1.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter

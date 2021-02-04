@@ -3,19 +3,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc_concepts/logic/cubit/counter_cubit.dart';
 
 class SecondScreen extends StatefulWidget {
-  SecondScreen({Key key, this.title, this.color}) : super(key: key);
+  SecondScreen({
+    Key key,
+    this.title,
+    this.color,
+    this.homeScreenKey,
+  }) : super(key: key);
 
   final String title;
   final Color color;
+  final GlobalKey<ScaffoldState> homeScreenKey;
 
   @override
   _SecondScreenState createState() => _SecondScreenState();
 }
 
 class _SecondScreenState extends State<SecondScreen> {
+  GlobalKey<ScaffoldState> secondScreenKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: secondScreenKey,
       appBar: AppBar(
         backgroundColor: widget.color,
         title: Text(widget.title),
@@ -30,13 +38,16 @@ class _SecondScreenState extends State<SecondScreen> {
             BlocConsumer<CounterCubit, CounterState>(
               listener: (context, state) {
                 if (state.wasIncremented == true) {
-                  Scaffold.of(context).showSnackBar(
+                  widget.homeScreenKey.currentState.removeCurrentSnackBar();
+                  secondScreenKey.currentState.showSnackBar(
                     SnackBar(
                       content: Text('Incremented!'),
                       duration: Duration(milliseconds: 300),
                     ),
                   );
                 } else if (state.wasIncremented == false) {
+                  widget.homeScreenKey.currentState.removeCurrentSnackBar();
+                  secondScreenKey.currentState.removeCurrentSnackBar();
                   Scaffold.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Decremented!'),
